@@ -1,0 +1,55 @@
+STEPS TO MANUALLY ADD A QUEUE TO A PORT AND ADD THE QUEUE TO A FLOW :
+
+1.To install a queue on port s1-eth1 of switch s1 allowing a maximum rate of 3Mbps
+
+
+sudo ovs-vsctl set port s1-eth1 qos=@newqos -- --id=@newqos create qos   type=linux-htb other-config:max-rate=3000000 queues:0=@newqueue -- --id=@newqueue create queue other-config:max-rate=3000000
+
+Use Restconf to Check if queue is installed in operational dataset of controller
+http://10.100.115.1:8181/restconf/operational/opendaylight-inventory:nodes/node/openflow:1/node-connector/openflow:1:1/queue/0
+
+2. Install restconf flow having destination to httpserver to pass through the queue associated with s1-eth1 port using Restconf API:
+http://10.100.115.1:8181/restconf/config/opendaylight-inventory:nodes/node/openflow:1/table/0/flow/1
+
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flow xmlns="urn:opendaylight:flow:inventory">
+   <priority>210</priority>
+   <flow-name>Queueflow</flow-name>
+   <match>
+       <ethernet-match>
+           <ethernet-type>
+               <type>2048</type>
+           </ethernet-type>
+           <ethernet-destination>
+               <address>00:00:00:00:00:03</address>
+           </ethernet-destination>
+       </ethernet-match>
+       <ipv4-destination>10.0.0.3/32</ipv4-destination>
+     
+   </match>
+   <id>1</id>
+   <table_id>0</table_id>
+       <hard-timeout>5000</hard-timeout>
+   <idle-timeout>4500</idle-timeout>
+   <instructions>
+       <instruction>
+           <order>0</order>
+           <apply-actions>
+               <action>
+                 <order>1</order>
+                       <output-action>
+                       <output-node-connector>1</output-node-connector>
+                   </output-action>
+               </action>
+               <action>
+                   <order>0</order>
+                     <set-queue-action>
+                       <queue>newqueue</queue>
+                       <queue-id>0</queue-id>
+                       </set-queue-action>
+                 </action>
+           </apply-actions>
+       </instruction>
+   </instructions>
+</flow>

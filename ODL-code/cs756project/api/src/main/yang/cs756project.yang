@@ -1,0 +1,44 @@
+module cs756project {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:cs756project";
+    prefix "cs756project";
+
+    revision "2015-01-05" {
+        description "Initial revision of cs756project model";
+    }
+
+    import ietf-inet-types {
+        prefix inet;
+    }
+
+    container rate-monitor {
+        description "Contains the primary and backup server node name and IP addresses";
+
+        list server-info {
+            description "Describes a server node";
+
+            key p-node-id;
+
+            leaf p-node-id {
+                description "The ID of the p node";
+                type string;
+            }
+            leaf p-node-ip {
+                description "The IP addr of the p node";
+                type inet:ipv4-address;
+            }
+            leaf b-node-id {
+                description "The ID of the b node";
+                type string;
+            }
+            leaf b-node-ip {
+                description "The IP addr of the b node";
+                type inet:ipv4-address;
+            }
+            leaf threshold {
+                description "The rate at which we trigger the VNF migration";
+                type uint64;
+            }
+        }
+    }
+}

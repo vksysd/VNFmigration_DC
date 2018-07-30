@@ -1,0 +1,11 @@
+{
+  "server-info": [
+    {
+      "p-node-id": "openflow:1",
+      "p-node-ip": "10.0.0.1",
+      "b-node-id": "openflow:2",
+      "b-node-ip": "10.0.0.2",
+      "threshold": 3000
+    }
+  ]
+}

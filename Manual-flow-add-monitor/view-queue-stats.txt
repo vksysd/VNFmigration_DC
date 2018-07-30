@@ -1,0 +1,3 @@
+The following REST API is used to view the queue statistics for the relavant switch port
+
+http://10.100.115.1:8181/restconf/operational/opendaylight-inventory:nodes/node/openflow:1/node-connector/openflow:1:1/queue/0
